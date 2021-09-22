@@ -1,7 +1,11 @@
-python-ssh API
-##############
+#############
+API Reference
+#############
 
 .. toctree::
+    :maxdepth: 1
 
-    ssh_connect
-    errors
+    SSH <ssh>
+    Core Functionality <core>
+    SSH Config <config>
+    Errors <errors>
