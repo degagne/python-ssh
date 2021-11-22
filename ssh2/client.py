@@ -2,6 +2,7 @@ import paramiko
 import select
 import typing as t
 
+from contextlib import suppress
 from socket import error as SocketError
 from paramiko.config import SSH_PORT
 from paramiko.ssh_exception import (
@@ -78,6 +79,13 @@ class SSH:
         """
         if isinstance(self._client, paramiko.SSHClient):
             self._client.close()
+
+    def is_active(self) -> bool:
+        with suppress(EOFError):
+            transport = self._client.get_transport()
+            transport.send_ignore()
+            return True
+        return False
 
     def open_tunnel(
         self,

@@ -88,7 +88,7 @@ class SSHConfigData:
     def __post_init__(self):
         if self.use_ssh_config:
             configs = copy.copy(self.__dict__)
-            configs.update(self.load_ssh_config(self.hostname))
+            configs.update(self.load_ssh_config())
             self.__dict__.update({k: v for k, v in configs.items()})
 
     def __iter__(self):
@@ -96,8 +96,7 @@ class SSHConfigData:
             if k not in ["use_ssh_config", "host_key_policy", "host_key_file"]:
                 yield k, v
 
-    @classmethod
-    def load_ssh_config(cls, config_file: t.Optional[str] = SSH_CONFIG) -> dict:
+    def load_ssh_config(self, config_file: t.Optional[str] = SSH_CONFIG) -> dict:
         """
         Loads SSH configuration properties.
 
@@ -116,7 +115,7 @@ class SSHConfigData:
                 f"SSH configuration file '{config_file}' cannot be found.")
 
         configs_dict = SSHConfigDict()
-        ssh_config = SSHConfig.from_path(config_file).lookup(cls.hostname)
+        ssh_config = SSHConfig.from_path(config_file).lookup(self.hostname)
 
         for (key, value, value_type) in CONFIG_KEY_MAPPING:
             if key in ssh_config:
