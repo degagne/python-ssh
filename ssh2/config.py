@@ -97,11 +97,7 @@ class SSHConfigData:
                 yield k, v
 
     @classmethod
-    def load_ssh_config(
-        cls,
-        hostname: str,
-        config_file: t.Optional[str] = SSH_CONFIG
-    ) -> dict:
+    def load_ssh_config(cls, config_file: t.Optional[str] = SSH_CONFIG) -> dict:
         """
         Loads SSH configuration properties.
 
@@ -120,7 +116,7 @@ class SSHConfigData:
                 f"SSH configuration file '{config_file}' cannot be found.")
 
         configs_dict = SSHConfigDict()
-        ssh_config = SSHConfig.from_path(config_file).lookup(hostname)
+        ssh_config = SSHConfig.from_path(config_file).lookup(cls.hostname)
 
         for (key, value, value_type) in CONFIG_KEY_MAPPING:
             if key in ssh_config:
